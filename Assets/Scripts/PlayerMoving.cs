@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMoving : MonoBehaviour
 {
+    //setting speed
     public float speed = 3.0f;
 
     public Rigidbody2D rb;
@@ -14,44 +16,20 @@ public class PlayerMoving : MonoBehaviour
     bool haveWater = false;
 
     public GameObject catText;
-    public GameObject endText;
 
     void Start()
     {
+        //at start of game, meow isn't visible
         catText.SetActive(false);
-        endText.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //Vector3 newPos = transform.position;
-
-        /*if (Input.GetKey(KeyCode.W))
-        {
-            newPos.y += speed * Time.deltaTime;
-        }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            newPos.x -= speed * Time.deltaTime;
-        }
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            newPos.y -= speed * Time.deltaTime;
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            newPos.x += speed * Time.deltaTime;
-        }
-
-        transform.position = newPos;*/
-
+        //player movement
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
+        //player animation
         animator.SetFloat("Horizontal", movement.x);
         animator.SetFloat("Vertical", movement.y);
         animator.SetFloat("Speed", movement.sqrMagnitude);
@@ -60,21 +38,22 @@ public class PlayerMoving : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //moving independent of frames
         rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
     }
 
+    //meow when colliding with cat
     void OnCollisionEnter2D(Collision2D other)
     {
-        //Debug.Log(other.gameObject.name);
         if (other.gameObject.name == "Cat")
         {
             catText.SetActive(true);
         }
     }
 
+    //stop meowing when no longer colliding with cat
     void OnCollisionExit2D(Collision2D other)
     {
-        //Debug.Log(other.gameObject.name);
         if (other.gameObject.name == "Cat")
         {
             catText.SetActive(false);
@@ -83,16 +62,17 @@ public class PlayerMoving : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        //Debug.Log(other.gameObject.name);
+        //pick up water
         if(other.gameObject.name == "Water")
         {
             haveWater = true;
             Destroy(other.gameObject);
         }
-        
+
+        //end game if you have water
         if (haveWater && other.gameObject.name == "Blanket")
         {
-            endText.SetActive(true);
+            SceneManager.LoadScene(0);
         }
     }
 
