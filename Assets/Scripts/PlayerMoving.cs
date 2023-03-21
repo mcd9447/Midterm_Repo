@@ -60,17 +60,23 @@ public class PlayerMoving : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerStay2D(Collider2D other)
     {
         //pick up water
-        if(other.gameObject.name == "Water")
+        if (other.gameObject.name == "Water")
         {
-            haveWater = true;
-            Destroy(other.gameObject);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                haveWater = true;
+                Destroy(other.gameObject);
+            }
         }
+    }
 
-        //end game if you have water
-        if (haveWater && other.gameObject.name == "Blanket")
+    void OnTriggerEnter2D(Collider2D other)
+    {
+            //end game if you have water
+            if (haveWater && other.gameObject.name == "Blanket")
         {
             SceneManager.LoadScene(0);
         }
