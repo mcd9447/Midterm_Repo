@@ -13,7 +13,7 @@ public class PlayerMoving : MonoBehaviour
 
     Vector2 movement;
 
-    bool haveWater = false;
+    public static bool haveWater = false;
 
     public GameObject catText;
 
@@ -67,7 +67,7 @@ public class PlayerMoving : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                haveWater = true;
+                PlayerMoving.haveWater = true;
                 Destroy(other.gameObject);
             }
         }
@@ -76,13 +76,17 @@ public class PlayerMoving : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
             //end game if you have water
-        if (haveWater && other.gameObject.name == "Blanket")
+        if (PlayerMoving.haveWater && other.gameObject.name == "Blanket")
         {
             SceneManager.LoadScene(0);
         }
         if (other.gameObject.name == "Door")
         {
             SceneManager.LoadScene(2);
+        }
+        if (other.gameObject.name == "RoomDoor")
+        {
+            SceneManager.LoadScene(3);
         }
     }
 
