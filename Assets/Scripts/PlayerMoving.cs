@@ -76,9 +76,13 @@ public class PlayerMoving : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
             //end game if you have water
-            if (haveWater && other.gameObject.name == "Blanket")
+        if (haveWater && other.gameObject.name == "Blanket")
         {
             SceneManager.LoadScene(0);
+        }
+        if (other.gameObject.name == "Door")
+        {
+            SceneManager.LoadScene(2);
         }
     }
 
